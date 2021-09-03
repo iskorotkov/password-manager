@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/iskorotkov/passwordmanager/internal/database"
@@ -16,7 +17,7 @@ var (
 func UpdatePassword(p models.Password) database.Command {
 	return func(db *gorm.DB) error {
 		err := db.Updates(&p).Error
-		if err == gorm.ErrRecordNotFound {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return ErrUpdatePasswordNotFound
 		}
 

@@ -20,7 +20,7 @@ func New(connString string) (GormDB, error) {
 	}
 
 	err = db.AutoMigrate(
-		&models.Password{},
+		&models.Password{}, //nolint:exhaustivestruct
 	)
 	if err != nil {
 		return GormDB{}, fmt.Errorf("error migrating models: %w", err)

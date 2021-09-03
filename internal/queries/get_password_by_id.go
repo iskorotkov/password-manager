@@ -1,6 +1,7 @@
 package queries
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/iskorotkov/passwordmanager/internal/database"
@@ -16,7 +17,7 @@ var (
 func GetPasswordByID(id uint, p *models.Password) database.Query {
 	return func(db *gorm.DB) error {
 		err := db.First(p, id).Error
-		if err == gorm.ErrRecordNotFound {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return ErrGetPasswordByIDNotFound
 		}
 

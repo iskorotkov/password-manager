@@ -15,7 +15,7 @@ type Password struct {
 }
 
 func (p Password) Validate() error {
-	return validation.ValidateStruct(&p,
+	return validation.ValidateStruct(&p, //nolint:wrapcheck
 		validation.Field(&p.Website, validation.Required, is.URL),
 		validation.Field(&p.Username, validation.Required, is.Alphanumeric),
 		validation.Field(&p.Password, validation.Required),
@@ -33,7 +33,7 @@ func (p Password) ToDTO() openapi.Password {
 
 func (p Password) FromDTO(password openapi.Password) Password {
 	return Password{
-		Model:    gorm.Model{ID: uint(password.Id)},
+		Model:    gorm.Model{ID: uint(password.Id)}, //nolint:exhaustivestruct
 		Website:  password.Website,
 		Username: password.Username,
 		Password: password.Password,

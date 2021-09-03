@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/iskorotkov/passwordmanager/internal/database"
@@ -15,8 +16,8 @@ var (
 
 func DeletePassword(id uint) database.Command {
 	return func(db *gorm.DB) error {
-		err := db.Delete(&models.Password{}, id).Error
-		if err == gorm.ErrRecordNotFound {
+		err := db.Delete(&models.Password{}, id).Error //nolint:exhaustivestruct
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return ErrDeletePasswordNotFound
 		}
 

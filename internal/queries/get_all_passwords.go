@@ -8,9 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var (
-	ErrGetAllPasswordsInternalError = fmt.Errorf("internal error")
-)
+var ErrGetAllPasswordsInternalError = fmt.Errorf("internal error")
 
 func GetAllPasswords(p *[]models.Password) database.Query {
 	return func(db *gorm.DB) error {

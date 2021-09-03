@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -12,11 +13,13 @@ import (
 	"github.com/iskorotkov/passwordmanager/internal/queries"
 )
 
+var ErrIDsDoNotMatch = fmt.Errorf("id in path and body doesn't match")
+
 type PasswordService struct {
 	db database.DB
 }
 
-func (p PasswordService) ApiV1PasswordsGet(_ context.Context) (openapi.ImplResponse, error) {
+func (p PasswordService) ApiV1PasswordsGet(_ context.Context) (openapi.ImplResponse, error) { //nolint:revive,stylecheck
 	var passwords []models.Password
 
 	err := p.db.Query(queries.GetAllPasswords(&passwords))
@@ -24,7 +27,7 @@ func (p PasswordService) ApiV1PasswordsGet(_ context.Context) (openapi.ImplRespo
 		return openapi.ImplResponse{
 			Code: http.StatusInternalServerError,
 			Body: err,
-		}, err
+		}, err //nolint:wrapcheck
 	}
 
 	results := make([]openapi.Password, 0, len(passwords))
@@ -38,20 +41,23 @@ func (p PasswordService) ApiV1PasswordsGet(_ context.Context) (openapi.ImplRespo
 	}, nil
 }
 
-func (p PasswordService) ApiV1PasswordsIdDelete(_ context.Context, i int32) (openapi.ImplResponse, error) {
+func (p PasswordService) ApiV1PasswordsIdDelete( //nolint:revive,stylecheck
+	_ context.Context,
+	i int32,
+) (openapi.ImplResponse, error) {
 	err := p.db.Exec(commands.DeletePassword(uint(i)))
-	if err == commands.ErrDeletePasswordNotFound {
+	if errors.Is(err, commands.ErrDeletePasswordNotFound) {
 		return openapi.ImplResponse{
 			Code: http.StatusNotFound,
 			Body: err,
-		}, err
+		}, err //nolint:wrapcheck
 	}
 
 	if err != nil {
 		return openapi.ImplResponse{
 			Code: http.StatusInternalServerError,
 			Body: err,
-		}, err
+		}, err //nolint:wrapcheck
 	}
 
 	return openapi.ImplResponse{
@@ -60,22 +66,25 @@ func (p PasswordService) ApiV1PasswordsIdDelete(_ context.Context, i int32) (ope
 	}, nil
 }
 
-func (p PasswordService) ApiV1PasswordsIdGet(_ context.Context, i int32) (openapi.ImplResponse, error) {
+func (p PasswordService) ApiV1PasswordsIdGet( //nolint:revive,stylecheck
+	_ context.Context,
+	i int32,
+) (openapi.ImplResponse, error) {
 	var password models.Password
 
 	err := p.db.Query(queries.GetPasswordByID(uint(i), &password))
-	if err == queries.ErrGetPasswordByIDNotFound {
+	if errors.Is(err, queries.ErrGetPasswordByIDNotFound) {
 		return openapi.ImplResponse{
 			Code: http.StatusNotFound,
 			Body: err,
-		}, err
+		}, err //nolint:wrapcheck
 	}
 
 	if err != nil {
 		return openapi.ImplResponse{
 			Code: http.StatusInternalServerError,
 			Body: err,
-		}, err
+		}, err //nolint:wrapcheck
 	}
 
 	return openapi.ImplResponse{
@@ -84,41 +93,43 @@ func (p PasswordService) ApiV1PasswordsIdGet(_ context.Context, i int32) (openap
 	}, nil
 }
 
-func (p PasswordService) ApiV1PasswordsIdPut(_ context.Context, i int32, password openapi.Password) (openapi.ImplResponse, error) {
+func (p PasswordService) ApiV1PasswordsIdPut( //nolint:revive,stylecheck
+	_ context.Context,
+	i int32,
+	password openapi.Password,
+) (openapi.ImplResponse, error) {
 	if password.Id != 0 && i != password.Id {
-		err := fmt.Errorf("id in path and body doesn't match")
-
 		return openapi.ImplResponse{
 			Code: http.StatusBadRequest,
-			Body: err,
-		}, err
+			Body: ErrIDsDoNotMatch,
+		}, ErrIDsDoNotMatch
 	}
 
 	password.Id = i
 
-	model := models.Password{}.FromDTO(password)
+	model := models.Password{}.FromDTO(password) //nolint:exhaustivestruct
 
 	err := model.Validate()
 	if err != nil {
 		return openapi.ImplResponse{
 			Code: http.StatusBadRequest,
 			Body: err,
-		}, err
+		}, err //nolint:wrapcheck
 	}
 
 	err = p.db.Exec(commands.UpdatePassword(model))
-	if err == commands.ErrUpdatePasswordNotFound {
+	if errors.Is(err, commands.ErrUpdatePasswordNotFound) {
 		return openapi.ImplResponse{
 			Code: http.StatusNotFound,
 			Body: err,
-		}, err
+		}, err //nolint:wrapcheck
 	}
 
 	if err != nil {
 		return openapi.ImplResponse{
 			Code: http.StatusInternalServerError,
 			Body: err,
-		}, err
+		}, err //nolint:wrapcheck
 	}
 
 	return openapi.ImplResponse{
@@ -127,17 +138,20 @@ func (p PasswordService) ApiV1PasswordsIdPut(_ context.Context, i int32, passwor
 	}, nil
 }
 
-func (p PasswordService) ApiV1PasswordsPost(_ context.Context, password openapi.Password) (openapi.ImplResponse, error) {
+func (p PasswordService) ApiV1PasswordsPost( //nolint:revive,stylecheck
+	_ context.Context,
+	password openapi.Password,
+) (openapi.ImplResponse, error) {
 	password.Id = 0
 
-	model := models.Password{}.FromDTO(password)
+	model := models.Password{}.FromDTO(password) //nolint:exhaustivestruct
 
 	err := model.Validate()
 	if err != nil {
 		return openapi.ImplResponse{
 			Code: http.StatusBadRequest,
 			Body: err,
-		}, err
+		}, err //nolint:wrapcheck
 	}
 
 	err = p.db.Exec(commands.CreatePassword(&model))
@@ -145,7 +159,7 @@ func (p PasswordService) ApiV1PasswordsPost(_ context.Context, password openapi.
 		return openapi.ImplResponse{
 			Code: http.StatusInternalServerError,
 			Body: err,
-		}, err
+		}, err //nolint:wrapcheck
 	}
 
 	return openapi.ImplResponse{

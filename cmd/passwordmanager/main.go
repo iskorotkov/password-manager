@@ -13,8 +13,7 @@ import (
 func main() {
 	log.Printf("Server started")
 
-	connString := os.Getenv("CONN_STRING")
-	db, err := postgres.New(connString)
+	db, err := postgres.New(os.Getenv("CONN_STRING"))
 	if err != nil {
 		log.Fatal(err)
 	}
