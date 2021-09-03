@@ -1,0 +1,111 @@
+openapi: 3.0.3
+info:
+  description: A simple manager for storing your passwords
+  title: Password manager
+  version: 1.0.0
+servers:
+- url: https://localhost:8080/
+paths:
+  /api/v1/passwords:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Password'
+                type: array
+                x-content-type: application/json
+          description: Success
+        "500":
+          description: Internal server error
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Password'
+      responses:
+        "201":
+          description: Success
+        "400":
+          description: Invalid password submitted
+        "500":
+          description: Internal server error
+  /api/v1/passwords/{id}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          description: Password deleted
+        "500":
+          description: Internal server error
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Password'
+          description: Success
+        "404":
+          description: No password with this ID
+        "500":
+          description: Internal server error
+    put:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Password'
+      responses:
+        "201":
+          description: Success
+        "400":
+          description: Invalid password submitted
+        "404":
+          description: No password with this ID
+        "500":
+          description: Internal server error
+components:
+  schemas:
+    Password:
+      example:
+        website: website
+        password: password
+        id: 0
+        username: username
+      properties:
+        id:
+          type: integer
+        website:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+      type: object

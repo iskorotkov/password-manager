@@ -1,0 +1,5 @@
+.vscode
+.idea
+.openapi-generator
+
+.env

@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:13
+    networks:
+      passwordmanager:
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+
+  server:
+    image: passwordmanager
+    build:
+      context: .
+      dockerfile: build/Dockerfile
+    restart: always
+    networks:
+      passwordmanager:
+    ports:
+      - "8080:8080"
+    environment:
+      CONN_STRING: host=postgres port=5432 user=postgres password=postgres dbname=postgres sslmode=disable
+
+networks:
+  passwordmanager:

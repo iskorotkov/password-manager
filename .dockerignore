@@ -1,0 +1,8 @@
+.vscode
+.idea
+.openapi-generator
+
+.env
+.openapi-generator-ignore
+.gitignore
+.golangci-lint

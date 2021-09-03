@@ -1,0 +1,11 @@
+linters:
+  fast: false
+  enable-all: true
+  disable:
+    - interfacer
+    - golint
+    - maligned
+    - scopelint
+run:
+  skip-dirs:
+    - go
