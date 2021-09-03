@@ -21,7 +21,10 @@ func main() {
 	passwordService := services.NewPasswordService(db)
 	passwordController := openapi.NewDefaultApiController(passwordService)
 
-	router := openapi.NewRouter(passwordController)
+	router := http.NewServeMux()
+	router.Handle("/openapi/v1/openapi.yaml", http.StripPrefix("/openapi/v1/", http.FileServer(http.Dir("./api"))))
+	router.Handle("/swagger-ui/", http.StripPrefix("/swagger-ui/", http.FileServer(http.Dir("./static/swagger/"))))
+	router.Handle("/", openapi.NewRouter(passwordController))
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

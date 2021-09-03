@@ -3,8 +3,6 @@ info:
   description: A simple manager for storing your passwords
   title: Password manager
   version: 1.0.0
-servers:
-- url: https://localhost:8080/
 paths:
   /api/v1/passwords:
     get:
