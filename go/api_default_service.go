@@ -49,6 +49,9 @@ func (s *DefaultApiService) ApiV1PasswordsIdDelete(ctx context.Context, id int32
 	//TODO: Uncomment the next line to return response Response(200, {}) or use other options such as http.Ok ...
 	//return Response(200, nil),nil
 
+	//TODO: Uncomment the next line to return response Response(400, {}) or use other options such as http.Ok ...
+	//return Response(400, nil),nil
+
 	//TODO: Uncomment the next line to return response Response(500, {}) or use other options such as http.Ok ...
 	//return Response(500, nil),nil
 
@@ -62,6 +65,9 @@ func (s *DefaultApiService) ApiV1PasswordsIdGet(ctx context.Context, id int32) (
 
 	//TODO: Uncomment the next line to return response Response(200, Password{}) or use other options such as http.Ok ...
 	//return Response(200, Password{}), nil
+
+	//TODO: Uncomment the next line to return response Response(400, {}) or use other options such as http.Ok ...
+	//return Response(400, nil),nil
 
 	//TODO: Uncomment the next line to return response Response(404, {}) or use other options such as http.Ok ...
 	//return Response(404, nil),nil

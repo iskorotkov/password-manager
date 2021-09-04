@@ -53,6 +53,8 @@ paths:
       responses:
         "200":
           description: Password deleted
+        "400":
+          description: Invalid password ID
         "500":
           description: Internal server error
     get:
@@ -72,6 +74,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Password'
           description: Success
+        "400":
+          description: Invalid password ID
         "404":
           description: No password with this ID
         "500":

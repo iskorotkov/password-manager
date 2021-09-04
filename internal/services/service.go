@@ -13,7 +13,10 @@ import (
 	"github.com/iskorotkov/password-manager/internal/queries"
 )
 
-var ErrIDsDoNotMatch = fmt.Errorf("id in path and body doesn't match")
+var (
+	ErrIDsDoNotMatch = fmt.Errorf("id in path and body doesn't match")
+	ErrNonPositiveID = fmt.Errorf("invalid password id")
+)
 
 type PasswordService struct {
 	db database.DB
@@ -45,6 +48,13 @@ func (p PasswordService) ApiV1PasswordsIdDelete( //nolint:revive,stylecheck
 	_ context.Context,
 	i int32,
 ) (openapi.ImplResponse, error) {
+	if i <= 0 {
+		return openapi.ImplResponse{
+			Code: http.StatusBadRequest,
+			Body: ErrNonPositiveID,
+		}, ErrNonPositiveID
+	}
+
 	err := p.db.Exec(commands.DeletePassword(uint(i)))
 	if errors.Is(err, commands.ErrDeletePasswordNotFound) {
 		return openapi.ImplResponse{
@@ -70,6 +80,13 @@ func (p PasswordService) ApiV1PasswordsIdGet( //nolint:revive,stylecheck
 	_ context.Context,
 	i int32,
 ) (openapi.ImplResponse, error) {
+	if i <= 0 {
+		return openapi.ImplResponse{
+			Code: http.StatusBadRequest,
+			Body: ErrNonPositiveID,
+		}, ErrNonPositiveID
+	}
+
 	var password models.Password
 
 	err := p.db.Query(queries.GetPasswordByID(uint(i), &password))
@@ -103,6 +120,13 @@ func (p PasswordService) ApiV1PasswordsIdPut( //nolint:revive,stylecheck
 			Code: http.StatusBadRequest,
 			Body: ErrIDsDoNotMatch,
 		}, ErrIDsDoNotMatch
+	}
+
+	if i <= 0 {
+		return openapi.ImplResponse{
+			Code: http.StatusBadRequest,
+			Body: ErrNonPositiveID,
+		}, ErrNonPositiveID
 	}
 
 	password.Id = i
