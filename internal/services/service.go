@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"net/http"
 
-	openapi "github.com/iskorotkov/passwordmanager/go"
-	"github.com/iskorotkov/passwordmanager/internal/commands"
-	"github.com/iskorotkov/passwordmanager/internal/database"
-	"github.com/iskorotkov/passwordmanager/internal/models"
-	"github.com/iskorotkov/passwordmanager/internal/queries"
+	openapi "github.com/iskorotkov/password-manager/go"
+	"github.com/iskorotkov/password-manager/internal/commands"
+	"github.com/iskorotkov/password-manager/internal/database"
+	"github.com/iskorotkov/password-manager/internal/models"
+	"github.com/iskorotkov/password-manager/internal/queries"
 )
 
 var ErrIDsDoNotMatch = fmt.Errorf("id in path and body doesn't match")

@@ -1,12 +1,11 @@
-module github.com/iskorotkov/passwordmanager
+module github.com/iskorotkov/password-manager
 
 go 1.17
 
-require github.com/gorilla/mux v1.8.0
-
 require (
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d // indirect
-	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible // indirect
+	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
+	github.com/gorilla/mux v1.8.0
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.10.0 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
@@ -19,6 +18,6 @@ require (
 	github.com/jinzhu/now v1.1.2 // indirect
 	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
 	golang.org/x/text v0.3.6 // indirect
-	gorm.io/driver/postgres v1.1.0 // indirect
-	gorm.io/gorm v1.21.14 // indirect
+	gorm.io/driver/postgres v1.1.0
+	gorm.io/gorm v1.21.14
 )

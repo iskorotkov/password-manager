@@ -6,9 +6,9 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
-	openapi "github.com/iskorotkov/passwordmanager/go"
-	"github.com/iskorotkov/passwordmanager/internal/database/postgres"
-	"github.com/iskorotkov/passwordmanager/internal/services"
+	openapi "github.com/iskorotkov/password-manager/go"
+	"github.com/iskorotkov/password-manager/internal/database/postgres"
+	"github.com/iskorotkov/password-manager/internal/services"
 )
 
 func main() {

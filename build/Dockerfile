@@ -6,7 +6,7 @@ RUN go get -d -v ./...
 
 COPY . .
 ENV CGO_ENABLED=0
-RUN go build -o app cmd/passwordmanager/main.go
+RUN go build -o app cmd/password-manager/main.go
 
 FROM alpine AS runtime
 WORKDIR /

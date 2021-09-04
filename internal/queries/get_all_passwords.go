@@ -3,8 +3,8 @@ package queries
 import (
 	"fmt"
 
-	"github.com/iskorotkov/passwordmanager/internal/database"
-	"github.com/iskorotkov/passwordmanager/internal/models"
+	"github.com/iskorotkov/password-manager/internal/database"
+	"github.com/iskorotkov/password-manager/internal/models"
 	"gorm.io/gorm"
 )
 

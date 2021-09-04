@@ -3,7 +3,7 @@ package models
 import (
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
-	openapi "github.com/iskorotkov/passwordmanager/go"
+	openapi "github.com/iskorotkov/password-manager/go"
 	"gorm.io/gorm"
 )
 
