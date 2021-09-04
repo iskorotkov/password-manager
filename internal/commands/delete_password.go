@@ -18,12 +18,16 @@ func DeletePassword(id uint) database.Command {
 	return func(db *gorm.DB) error {
 		tx := db.Delete(&models.Password{}, id) //nolint:exhaustivestruct
 
-		if errors.Is(tx.Error, gorm.ErrRecordNotFound) || tx.RowsAffected == 0 {
+		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
 			return ErrDeletePasswordNotFound
 		}
 
 		if tx.Error != nil {
 			return ErrDeletePasswordInternalError
+		}
+
+		if tx.RowsAffected == 0 {
+			return ErrDeletePasswordNotFound
 		}
 
 		return nil
