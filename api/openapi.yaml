@@ -1,12 +1,14 @@
 openapi: 3.0.3
 info:
+  contact:
+    email: korotkov.ivan.s@gmail.com
+    name: Ivan Korotkov
+    url: https://github.com/iskorotkov
   description: A simple manager for storing your passwords
   title: Password manager
   version: 1.0.0
-  contact:
-    name: Ivan Korotkov
-    email: korotkov.ivan.s@gmail.com
-    url: https://github.com/iskorotkov
+servers:
+- url: /
 paths:
   /api/v1/passwords:
     get:
