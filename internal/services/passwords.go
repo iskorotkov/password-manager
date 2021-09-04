@@ -13,15 +13,6 @@ import (
 	"github.com/iskorotkov/password-manager/internal/queries"
 )
 
-const (
-	BodyInternalServerError      = "internal server error"
-	BodyPasswordIDMustBePositive = "password id must be positive"
-	BodyPasswordNotFound         = "password not found"
-	BodyPasswordDeleted          = "password deleted"
-	BodyIDsMustMatch             = "ids in path and body must match"
-	BodyPasswordUpdated          = "password updated"
-)
-
 var (
 	ErrIDsDoNotMatch = fmt.Errorf("id in path and body don't match")
 	ErrNonPositiveID = fmt.Errorf("invalid password id")
@@ -38,7 +29,7 @@ func (p PasswordService) ApiV1PasswordsGet(_ context.Context) (openapi.ImplRespo
 	if err != nil {
 		return openapi.ImplResponse{
 			Code: http.StatusInternalServerError,
-			Body: BodyInternalServerError,
+			Body: nil,
 		}, err //nolint:wrapcheck
 	}
 
@@ -60,7 +51,7 @@ func (p PasswordService) ApiV1PasswordsIdDelete( //nolint:revive,stylecheck
 	if i <= 0 {
 		return openapi.ImplResponse{
 			Code: http.StatusBadRequest,
-			Body: BodyPasswordIDMustBePositive,
+			Body: nil,
 		}, ErrNonPositiveID
 	}
 
@@ -68,20 +59,20 @@ func (p PasswordService) ApiV1PasswordsIdDelete( //nolint:revive,stylecheck
 	if errors.Is(err, commands.ErrDeletePasswordNotFound) {
 		return openapi.ImplResponse{
 			Code: http.StatusNotFound,
-			Body: BodyPasswordNotFound,
+			Body: nil,
 		}, err //nolint:wrapcheck
 	}
 
 	if err != nil {
 		return openapi.ImplResponse{
 			Code: http.StatusInternalServerError,
-			Body: BodyInternalServerError,
+			Body: nil,
 		}, err //nolint:wrapcheck
 	}
 
 	return openapi.ImplResponse{
 		Code: http.StatusOK,
-		Body: BodyPasswordDeleted,
+		Body: "password deleted",
 	}, nil
 }
 
@@ -92,7 +83,7 @@ func (p PasswordService) ApiV1PasswordsIdGet( //nolint:revive,stylecheck
 	if i <= 0 {
 		return openapi.ImplResponse{
 			Code: http.StatusBadRequest,
-			Body: BodyPasswordIDMustBePositive,
+			Body: nil,
 		}, ErrNonPositiveID
 	}
 
@@ -102,14 +93,14 @@ func (p PasswordService) ApiV1PasswordsIdGet( //nolint:revive,stylecheck
 	if errors.Is(err, queries.ErrGetPasswordByIDNotFound) {
 		return openapi.ImplResponse{
 			Code: http.StatusNotFound,
-			Body: BodyPasswordNotFound,
+			Body: nil,
 		}, err //nolint:wrapcheck
 	}
 
 	if err != nil {
 		return openapi.ImplResponse{
 			Code: http.StatusInternalServerError,
-			Body: BodyInternalServerError,
+			Body: nil,
 		}, err //nolint:wrapcheck
 	}
 
@@ -127,14 +118,14 @@ func (p PasswordService) ApiV1PasswordsIdPut( //nolint:revive,stylecheck
 	if password.Id != 0 && i != password.Id {
 		return openapi.ImplResponse{
 			Code: http.StatusBadRequest,
-			Body: BodyIDsMustMatch,
+			Body: nil,
 		}, ErrIDsDoNotMatch
 	}
 
 	if i <= 0 {
 		return openapi.ImplResponse{
 			Code: http.StatusBadRequest,
-			Body: BodyPasswordIDMustBePositive,
+			Body: nil,
 		}, ErrNonPositiveID
 	}
 
@@ -146,7 +137,7 @@ func (p PasswordService) ApiV1PasswordsIdPut( //nolint:revive,stylecheck
 	if err != nil {
 		return openapi.ImplResponse{
 			Code: http.StatusBadRequest,
-			Body: err, // User friendly validation error.
+			Body: nil,
 		}, err //nolint:wrapcheck
 	}
 
@@ -154,20 +145,20 @@ func (p PasswordService) ApiV1PasswordsIdPut( //nolint:revive,stylecheck
 	if errors.Is(err, commands.ErrUpdatePasswordNotFound) {
 		return openapi.ImplResponse{
 			Code: http.StatusNotFound,
-			Body: BodyPasswordNotFound,
+			Body: nil,
 		}, err //nolint:wrapcheck
 	}
 
 	if err != nil {
 		return openapi.ImplResponse{
 			Code: http.StatusInternalServerError,
-			Body: BodyInternalServerError,
+			Body: nil,
 		}, err //nolint:wrapcheck
 	}
 
 	return openapi.ImplResponse{
 		Code: http.StatusOK,
-		Body: BodyPasswordUpdated,
+		Body: "password updated",
 	}, nil
 }
 
@@ -183,7 +174,7 @@ func (p PasswordService) ApiV1PasswordsPost( //nolint:revive,stylecheck
 	if err != nil {
 		return openapi.ImplResponse{
 			Code: http.StatusBadRequest,
-			Body: err, // User friendly validation error.
+			Body: nil,
 		}, err //nolint:wrapcheck
 	}
 
@@ -191,7 +182,7 @@ func (p PasswordService) ApiV1PasswordsPost( //nolint:revive,stylecheck
 	if err != nil {
 		return openapi.ImplResponse{
 			Code: http.StatusInternalServerError,
-			Body: BodyInternalServerError,
+			Body: nil,
 		}, err //nolint:wrapcheck
 	}
 
