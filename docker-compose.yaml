@@ -1,6 +1,9 @@
+version: "3.9"
+
 services:
   postgres:
     image: postgres:13
+    restart: always
     networks:
       passwordmanager:
     ports:
@@ -9,6 +12,12 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   server:
     image: password-manager
@@ -16,12 +25,20 @@ services:
       context: .
       dockerfile: build/Dockerfile
     restart: always
+    depends_on:
+      - postgres
     networks:
       passwordmanager:
     ports:
       - "8080:8080"
     environment:
       CONN_STRING: host=postgres port=5432 user=postgres password=postgres dbname=postgres sslmode=disable
+    healthcheck:
+      test: ["CMD", "wget", "http://localhost:8080/api/v1/passwords", "-O", "-", "-q"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 1s
 
 networks:
   passwordmanager:

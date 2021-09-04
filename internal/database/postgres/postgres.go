@@ -2,6 +2,8 @@ package postgres
 
 import (
 	"fmt"
+	"log"
+	"time"
 
 	"github.com/iskorotkov/password-manager/internal/database"
 	"github.com/iskorotkov/password-manager/internal/models"
@@ -9,15 +11,37 @@ import (
 	"gorm.io/gorm"
 )
 
+const (
+	retries  = 5
+	interval = time.Second * 6
+)
+
 type GormDB struct {
 	db *gorm.DB
 }
 
 func New(connString string) (GormDB, error) {
-	db, err := gorm.Open(postgres.Open(connString))
+	var (
+		db  *gorm.DB
+		err error
+	)
+
+	for i := 0; i < retries; i++ {
+		db, err = gorm.Open(postgres.Open(connString))
+		if err == nil {
+			break
+		}
+
+		log.Printf("error connecting to database, will wait for %v and repeat (%d/%d)", interval, i+1, retries)
+
+		time.Sleep(interval)
+	}
+
 	if err != nil {
 		return GormDB{}, fmt.Errorf("error connecting to database: %w", err)
 	}
+
+	log.Printf("connected to DB")
 
 	err = db.AutoMigrate(
 		&models.Password{}, //nolint:exhaustivestruct
